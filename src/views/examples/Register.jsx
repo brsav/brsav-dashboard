@@ -21,7 +21,6 @@ import React from "react";
 import {
   Button,
   Card,
-  CardHeader,
   CardBody,
   FormGroup,
   Form,
@@ -29,8 +28,7 @@ import {
   InputGroupAddon,
   InputGroupText,
   InputGroup,
-  Row,
-  Col
+  Col,
 } from "reactstrap";
 
 class Register extends React.Component {
@@ -48,7 +46,17 @@ class Register extends React.Component {
                         <i className="ni ni-hat-3" />
                       </InputGroupText>
                     </InputGroupAddon>
-                    <Input placeholder="Nome" type="text" />
+                    <Input placeholder="Primeiro nome" type="text" />
+                  </InputGroup>
+                </FormGroup>
+                <FormGroup>
+                  <InputGroup className="input-group-alternative mb-3">
+                    <InputGroupAddon addonType="prepend">
+                      <InputGroupText>
+                        <i className="ni ni-hat-3" />
+                      </InputGroupText>
+                    </InputGroupAddon>
+                    <Input placeholder="Ultimo nome" type="text" />
                   </InputGroup>
                 </FormGroup>
                 <FormGroup>
@@ -69,6 +77,36 @@ class Register extends React.Component {
                       </InputGroupText>
                     </InputGroupAddon>
                     <Input placeholder="Senha" type="password" />
+                  </InputGroup>
+                </FormGroup>
+                <FormGroup>
+                  <InputGroup className="input-group-alternative">
+                    <InputGroupAddon addonType="prepend">
+                      <InputGroupText>
+                        <i className="ni ni-lock-circle-open" />
+                      </InputGroupText>
+                    </InputGroupAddon>
+                    <Input placeholder="Telefone" type="password" />
+                  </InputGroup>
+                </FormGroup>
+                <FormGroup>
+                  <Input type="select" name="select" id="exampleSelect">
+                    <option>Tipo de estabelecimento</option>
+                    <option>Casa</option>
+                    <option>Mercado</option>
+                    <option>Padaria</option>
+                    <option>Mercearia</option>
+                    <option>Atacado</option>
+                  </Input>
+                </FormGroup>
+                <FormGroup>
+                  <InputGroup className="input-group-alternative">
+                    <InputGroupAddon addonType="prepend">
+                      <InputGroupText>
+                        <i className="ni ni-lock-circle-open" />
+                      </InputGroupText>
+                    </InputGroupAddon>
+                    <Input placeholder="Nome do estabelecimento" type="text" />
                   </InputGroup>
                 </FormGroup>
                 <div className="text-center">
