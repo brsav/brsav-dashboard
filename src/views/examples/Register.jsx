@@ -57,8 +57,8 @@ class Register extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  valid(name) {
-    switch (name) {
+  valid(target) {
+    switch (target.name) {
       case 'firstName':
         const firstName = this.state.firstName
         if (firstName.length <= 100 && firstName.length >= 2) {
@@ -76,7 +76,12 @@ class Register extends React.Component {
         }
         break;
       case 'email':
-        //TODO: valid email
+        var re = /\S+@\S+\.\S+/;
+        if (re.test(this.state.email)) {
+          this.setState({ error: { ...this.state.error, email: '' } })
+        } else {
+          this.setState({ error: { ...this.state.error, email: true } })
+        }
         break;
       case 'password':
         const password = this.state.password
@@ -95,7 +100,11 @@ class Register extends React.Component {
         }
         break;
       case 'establishmentType':
-        //do nothing
+        if (target.value === 'Tipo de estabelecimento') {
+          this.setState({ error: { ...this.state.error, establishmentType: true } })
+        } else {
+          this.setState({ error: { ...this.state.error, establishmentType: '' } })
+        }
         break;
       case 'establishmentName':
         const establishmentName = this.state.establishmentName
@@ -105,12 +114,15 @@ class Register extends React.Component {
           this.setState({ error: { ...this.state.error, establishmentName: true } })
         }
         break;
+      default:
+        //ferrou
+        break;
     }
   }
 
   handleChange(event) {
     this.setState({ [event.target.name]: event.target.value.trim() });
-    this.valid(event.target.name)
+    this.valid(event.target)
   }
 
   handleSubmit(event) {
@@ -135,6 +147,7 @@ class Register extends React.Component {
                     </InputGroupAddon>
                     <Input name='firstName' placeholder="Primeiro nome" type="text" value={this.state.firstName} onChange={this.handleChange} />
                   </InputGroup>
+                  {this.state.error.firstName ? <p style={{ color: 'red' }}>O nome deve ter 2 a 100 caracters.</p> : <p></p>}
                 </FormGroup>
                 <FormGroup>
                   <InputGroup className="input-group-alternative mb-3">
@@ -145,6 +158,7 @@ class Register extends React.Component {
                     </InputGroupAddon>
                     <Input name='lastName' placeholder="Ultimo nome" type="text" value={this.state.lastName} onChange={this.handleChange} />
                   </InputGroup>
+                  {this.state.error.lastName ? <p style={{ color: 'red' }}>O nome deve ter 2 a 100 caracters.</p> : <p></p>}
                 </FormGroup>
                 <FormGroup>
                   <InputGroup className="input-group-alternative mb-3">
@@ -155,6 +169,7 @@ class Register extends React.Component {
                     </InputGroupAddon>
                     <Input name='email' placeholder="Email" type="email" value={this.state.email} onChange={this.handleChange} />
                   </InputGroup>
+                  {this.state.error.email ? <p style={{ color: 'red' }}>Email inválido.</p> : <p></p>}
                 </FormGroup>
                 <FormGroup>
                   <InputGroup className="input-group-alternative">
@@ -165,6 +180,7 @@ class Register extends React.Component {
                     </InputGroupAddon>
                     <Input name='password' placeholder="Senha" type="password" value={this.state.password} onChange={this.handleChange} />
                   </InputGroup>
+                  {this.state.error.password ? <p style={{ color: 'red' }}>Senha deve conter 4 a 30 caracters.</p> : <p></p>}
                 </FormGroup>
                 <FormGroup>
                   <InputGroup className="input-group-alternative">
@@ -175,6 +191,7 @@ class Register extends React.Component {
                     </InputGroupAddon>
                     <Input name='phone' placeholder="Telefone" type="text" value={this.state.phone} onChange={this.handleChange} />
                   </InputGroup>
+                  {this.state.error.phone ? <p style={{ color: 'red' }}>Telefone inválido.</p> : <p></p>}
                 </FormGroup>
                 <FormGroup>
                   <Input type="select" name="establishmentType" id="exampleSelect" value={this.state.establishmentType} onChange={this.handleChange}>
@@ -185,6 +202,7 @@ class Register extends React.Component {
                     <option>Mercearia</option>
                     <option>Atacado</option>
                   </Input>
+                  {this.state.error.establishmentType ? <p style={{ color: 'red' }}>Seleciona o um tipo.</p> : <p></p>}
                 </FormGroup>
                 <FormGroup>
                   <InputGroup className="input-group-alternative">
@@ -195,6 +213,7 @@ class Register extends React.Component {
                     </InputGroupAddon>
                     <Input name='establishmentName' placeholder="Nome do estabelecimento" type="text" value={this.state.establishmentName} onChange={this.handleChange} />
                   </InputGroup>
+                  {this.state.error.establishmentName ? <p style={{ color: 'red' }}>Por favor seleciona uma opção.</p> : <p></p>}
                 </FormGroup>
                 <div className="text-center">
                   <Button onClick={this.handleSubmit} className="mt-4" color="primary" type="button">Registrar</Button>
