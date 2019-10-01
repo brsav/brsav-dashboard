@@ -31,6 +31,8 @@ import {
   Col,
 } from "reactstrap";
 
+import Api from '../../service/register/index'; //TODO: configurar um webpack
+
 class Register extends React.Component {
   constructor(props) {
     super(props);
@@ -128,6 +130,8 @@ class Register extends React.Component {
   handleSubmit(event) {
     console.log("error", this.state.error)
     console.log("this.state ", this.state)
+    const result = Api.users(this.state)
+    console.log("result")
     event.preventDefault();
   }
 
