@@ -21,7 +21,6 @@ import React from "react";
 import {
   Button,
   Card,
-  CardHeader,
   CardBody,
   FormGroup,
   Form,
@@ -29,55 +28,119 @@ import {
   InputGroupAddon,
   InputGroupText,
   InputGroup,
-  Row,
-  Col
+  Col,
 } from "reactstrap";
 
+import Api from '../../service/register/index'; //TODO: configurar um webpack
+
 class Register extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      firstName: '',
+      lastName: '',
+      email: '',
+      password: '',
+      phone: '',
+      establishmentType: '',
+      establishmentName: '',
+      error: {
+        firstName: '',
+        lastName: '',
+        email: '',
+        password: '',
+        phone: '',
+        establishmentType: '',
+        establishmentName: '',
+      }
+    };
+
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  valid(target) {
+    switch (target.name) {
+      case 'firstName':
+        const firstName = this.state.firstName
+        if (firstName.length <= 100 && firstName.length >= 2) {
+          this.setState({ error: { ...this.state.error, firstName: '' } })
+        } else {
+          this.setState({ error: { ...this.state.error, firstName: true } })
+        }
+        break;
+      case 'lastName':
+        const lastName = this.state.lastName
+        if (lastName.length <= 100 && lastName.length >= 2) {
+          this.setState({ error: { ...this.state.error, lastName: '' } })
+        } else {
+          this.setState({ error: { ...this.state.error, lastName: true } })
+        }
+        break;
+      case 'email':
+        var re = /\S+@\S+\.\S+/;
+        if (re.test(this.state.email)) {
+          this.setState({ error: { ...this.state.error, email: '' } })
+        } else {
+          this.setState({ error: { ...this.state.error, email: true } })
+        }
+        break;
+      case 'password':
+        const password = this.state.password
+        if (password.length <= 30 && password.length >= 4) {
+          this.setState({ error: { ...this.state.error, password: '' } })
+        } else {
+          this.setState({ error: { ...this.state.error, password: true } })
+        }
+        break;
+      case 'phone':
+        const phone = this.state.phone
+        if (phone.length <= 11 && phone.length >= 10) {
+          this.setState({ error: { ...this.state.error, phone: '' } })
+        } else {
+          this.setState({ error: { ...this.state.error, phone: true } })
+        }
+        break;
+      case 'establishmentType':
+        if (target.value === 'Tipo de estabelecimento') {
+          this.setState({ error: { ...this.state.error, establishmentType: true } })
+        } else {
+          this.setState({ error: { ...this.state.error, establishmentType: '' } })
+        }
+        break;
+      case 'establishmentName':
+        const establishmentName = this.state.establishmentName
+        if (establishmentName.length <= 100 && establishmentName.length >= 2) {
+          this.setState({ error: { ...this.state.error, establishmentName: '' } })
+        } else {
+          this.setState({ error: { ...this.state.error, establishmentName: true } })
+        }
+        break;
+      default:
+        //ferrou
+        break;
+    }
+  }
+
+  handleChange(event) {
+    this.setState({ [event.target.name]: event.target.value.trim() });
+    this.valid(event.target)
+  }
+
+  handleSubmit(event) {
+    console.log("error", this.state.error)
+    console.log("this.state ", this.state)
+    const result = Api(this.state)
+    console.log("result ", result)
+    event.preventDefault();
+  }
+
   render() {
     return (
       <>
         <Col lg="6" md="8">
           <Card className="bg-secondary shadow border-0">
-            <CardHeader className="bg-transparent pb-5">
-              <div className="text-muted text-center mt-2 mb-4">
-                <small>Sign up with</small>
-              </div>
-              <div className="text-center">
-                <Button
-                  className="btn-neutral btn-icon mr-4"
-                  color="default"
-                  href="#pablo"
-                  onClick={e => e.preventDefault()}
-                >
-                  <span className="btn-inner--icon">
-                    <img
-                      alt="..."
-                      src={require("assets/img/icons/common/github.svg")}
-                    />
-                  </span>
-                  <span className="btn-inner--text">Github</span>
-                </Button>
-                <Button
-                  className="btn-neutral btn-icon"
-                  color="default"
-                  href="#pablo"
-                  onClick={e => e.preventDefault()}
-                >
-                  <span className="btn-inner--icon">
-                    <img
-                      alt="..."
-                      src={require("assets/img/icons/common/google.svg")}
-                    />
-                  </span>
-                  <span className="btn-inner--text">Google</span>
-                </Button>
-              </div>
-            </CardHeader>
             <CardBody className="px-lg-5 py-lg-5">
-              <div className="text-center text-muted mb-4">
-                <small>Or sign up with credentials</small>
-              </div>
               <Form role="form">
                 <FormGroup>
                   <InputGroup className="input-group-alternative mb-3">
@@ -86,8 +149,20 @@ class Register extends React.Component {
                         <i className="ni ni-hat-3" />
                       </InputGroupText>
                     </InputGroupAddon>
-                    <Input placeholder="Name" type="text" />
+                    <Input name='firstName' placeholder="Primeiro nome" type="text" value={this.state.firstName} onChange={this.handleChange} />
                   </InputGroup>
+                  {this.state.error.firstName ? <p style={{ color: 'red' }}>O nome deve ter 2 a 100 caracters.</p> : <p></p>}
+                </FormGroup>
+                <FormGroup>
+                  <InputGroup className="input-group-alternative mb-3">
+                    <InputGroupAddon addonType="prepend">
+                      <InputGroupText>
+                        <i className="ni ni-hat-3" />
+                      </InputGroupText>
+                    </InputGroupAddon>
+                    <Input name='lastName' placeholder="Ultimo nome" type="text" value={this.state.lastName} onChange={this.handleChange} />
+                  </InputGroup>
+                  {this.state.error.lastName ? <p style={{ color: 'red' }}>O nome deve ter 2 a 100 caracters.</p> : <p></p>}
                 </FormGroup>
                 <FormGroup>
                   <InputGroup className="input-group-alternative mb-3">
@@ -96,8 +171,9 @@ class Register extends React.Component {
                         <i className="ni ni-email-83" />
                       </InputGroupText>
                     </InputGroupAddon>
-                    <Input placeholder="Email" type="email" />
+                    <Input name='email' placeholder="Email" type="email" value={this.state.email} onChange={this.handleChange} />
                   </InputGroup>
+                  {this.state.error.email ? <p style={{ color: 'red' }}>Email inválido.</p> : <p></p>}
                 </FormGroup>
                 <FormGroup>
                   <InputGroup className="input-group-alternative">
@@ -106,41 +182,45 @@ class Register extends React.Component {
                         <i className="ni ni-lock-circle-open" />
                       </InputGroupText>
                     </InputGroupAddon>
-                    <Input placeholder="Password" type="password" />
+                    <Input name='password' placeholder="Senha" type="password" value={this.state.password} onChange={this.handleChange} />
                   </InputGroup>
+                  {this.state.error.password ? <p style={{ color: 'red' }}>Senha deve conter 4 a 30 caracters.</p> : <p></p>}
                 </FormGroup>
-                <div className="text-muted font-italic">
-                  <small>
-                    password strength:{" "}
-                    <span className="text-success font-weight-700">strong</span>
-                  </small>
-                </div>
-                <Row className="my-4">
-                  <Col xs="12">
-                    <div className="custom-control custom-control-alternative custom-checkbox">
-                      <input
-                        className="custom-control-input"
-                        id="customCheckRegister"
-                        type="checkbox"
-                      />
-                      <label
-                        className="custom-control-label"
-                        htmlFor="customCheckRegister"
-                      >
-                        <span className="text-muted">
-                          I agree with the{" "}
-                          <a href="#pablo" onClick={e => e.preventDefault()}>
-                            Privacy Policy
-                          </a>
-                        </span>
-                      </label>
-                    </div>
-                  </Col>
-                </Row>
+                <FormGroup>
+                  <InputGroup className="input-group-alternative">
+                    <InputGroupAddon addonType="prepend">
+                      <InputGroupText>
+                        <i className="ni ni-lock-circle-open" />
+                      </InputGroupText>
+                    </InputGroupAddon>
+                    <Input name='phone' placeholder="Telefone" type="text" value={this.state.phone} onChange={this.handleChange} />
+                  </InputGroup>
+                  {this.state.error.phone ? <p style={{ color: 'red' }}>Telefone inválido.</p> : <p></p>}
+                </FormGroup>
+                <FormGroup>
+                  <Input type="select" name="establishmentType" id="exampleSelect" value={this.state.establishmentType} onChange={this.handleChange}>
+                    <option>Tipo de estabelecimento</option>
+                    <option>Casa</option>
+                    <option>Mercado</option>
+                    <option>Padaria</option>
+                    <option>Mercearia</option>
+                    <option>Atacado</option>
+                  </Input>
+                  {this.state.error.establishmentType ? <p style={{ color: 'red' }}>Seleciona o um tipo.</p> : <p></p>}
+                </FormGroup>
+                <FormGroup>
+                  <InputGroup className="input-group-alternative">
+                    <InputGroupAddon addonType="prepend">
+                      <InputGroupText>
+                        <i className="ni ni-lock-circle-open" />
+                      </InputGroupText>
+                    </InputGroupAddon>
+                    <Input name='establishmentName' placeholder="Nome do estabelecimento" type="text" value={this.state.establishmentName} onChange={this.handleChange} />
+                  </InputGroup>
+                  {this.state.error.establishmentName ? <p style={{ color: 'red' }}>Por favor seleciona uma opção.</p> : <p></p>}
+                </FormGroup>
                 <div className="text-center">
-                  <Button className="mt-4" color="primary" type="button">
-                    Create account
-                  </Button>
+                  <Button onClick={this.handleSubmit} className="mt-4" color="primary" type="button">Registrar</Button>
                 </div>
               </Form>
             </CardBody>
