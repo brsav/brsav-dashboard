@@ -130,8 +130,8 @@ class Register extends React.Component {
   handleSubmit(event) {
     console.log("error", this.state.error)
     console.log("this.state ", this.state)
-    const result = Api.users(this.state)
-    console.log("result")
+    const result = Api(this.state)
+    console.log("result ", result)
     event.preventDefault();
   }
 
